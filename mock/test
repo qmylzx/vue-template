@@ -1,0 +1,220 @@
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kuaishou.dp.common.webapp.ResponseMessage;
+
+/**
+ * @author liujiang05 <liujiang05@kuaishou.com>
+ * Created on 2019-12-18
+ */
+@RestController
+@RequestMapping("/dp/message/")
+public class TestController {
+
+    static class User {
+        private String userName;
+        private String pwd;
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getPwd() {
+            return pwd;
+        }
+
+        public void setPwd(String pwd) {
+            this.pwd = pwd;
+        }
+    }
+
+    static class Token {
+        private List<String> roles;
+        private String introduction;
+        private String avatar;
+        private String name;
+
+
+        public List<String> getRoles() {
+            return roles;
+        }
+
+        public void setRoles(List<String> roles) {
+            this.roles = roles;
+        }
+
+        public String getIntroduction() {
+            return introduction;
+        }
+
+        public void setIntroduction(String introduction) {
+            this.introduction = introduction;
+        }
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    @PostMapping("/user/login")
+    public ResponseMessage login(@RequestBody User token) {
+        return ResponseMessage.success("admin-token");
+    }
+
+    @GetMapping("/user/info")
+    public ResponseMessage getInfo(@RequestParam("token") String token) {
+        Token token1 = new Token();
+        token1.avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
+        token1.roles = Arrays.asList("admin");
+        token1.introduction = "test";
+        token1.name = "super";
+
+        return ResponseMessage.success(token1);
+    }
+
+    enum ChartType {
+        line,
+        pie;
+    }
+
+    static class ChartInfo {
+        //图表唯一id
+        private Long chartId;
+        //图表类型
+        private ChartType chartType;
+        // 图标像素
+        private String width; // initValue = 538px
+        private String height; //  initValue = 320ox
+        //end
+        //坐标相关信息
+        private Integer x; // 横坐标 0
+        private Integer y; // 纵坐标 0
+        private Integer h; // 网格倍数 17
+        private Integer w; // 网格倍数 49
+        //end
+        //相关数据
+        private Object data;
+
+        public Long getChartId() {
+            return chartId;
+        }
+
+        public void setChartId(Long chartId) {
+            this.chartId = chartId;
+        }
+
+        public ChartType getChartType() {
+            return chartType;
+        }
+
+        public void setChartType(ChartType chartType) {
+            this.chartType = chartType;
+        }
+
+        public String getWidth() {
+            return width;
+        }
+
+        public void setWidth(String width) {
+            this.width = width;
+        }
+
+        public String getHeight() {
+            return height;
+        }
+
+        public void setHeight(String height) {
+            this.height = height;
+        }
+
+        public Integer getX() {
+            return x;
+        }
+
+        public void setX(Integer x) {
+            this.x = x;
+        }
+
+        public Integer getY() {
+            return y;
+        }
+
+        public void setY(Integer y) {
+            this.y = y;
+        }
+
+        public Integer getW() {
+            return w;
+        }
+
+        public void setW(Integer w) {
+            this.w = w;
+        }
+
+        public Integer getH() {
+            return h;
+        }
+
+        public void setH(Integer h) {
+            this.h = h;
+        }
+
+        public Object getData() {
+            return data;
+        }
+
+        public void setData(Object data) {
+            this.data = data;
+        }
+    }
+
+    @GetMapping("/chart")
+    public ResponseMessage getChart() {
+        ChartInfo chartInfo = new ChartInfo();
+        chartInfo.setChartId(1L);
+        chartInfo.setChartType(ChartType.line);
+        chartInfo.setH(17);
+        chartInfo.setW(43);
+        chartInfo.setWidth("538px");
+        chartInfo.setHeight("320px");
+        chartInfo.setX(0);
+        chartInfo.setY(0);
+        chartInfo.setData(Arrays.asList(220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122));
+
+        ChartInfo c = new ChartInfo();
+        c.setChartId(2L);
+        c.setChartType(ChartType.line);
+        c.setH(17);
+        c.setW(43);
+        c.setWidth("538px");
+        c.setHeight("320px");
+        c.setX(0);
+        c.setY(0);
+        c.setData(Arrays.asList(99, 86, 57, 75, 345, 64, 55, 66, 120, 111, 132, 111));
+        return ResponseMessage.success(Arrays.asList(chartInfo,c));
+    }
+}
